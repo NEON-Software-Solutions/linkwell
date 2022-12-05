@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// LinkWell class created
 class LinkWell extends StatelessWidget {
   /// The RegEx pattern is created
-  final RegExp exp = Helper.regex;
+  final RegExp? exp;
 
   /// This is holds all links when detected
   final List links = <String>[];
@@ -117,6 +117,7 @@ class LinkWell extends StatelessWidget {
     this.strutStyle,
     this.listOfNames,
     this.textWidthBasis = TextWidthBasis.parent,
+    this.exp,
   })  : assert(text != null),
         assert(textAlign != null),
         assert(softWrap != null),
@@ -133,7 +134,7 @@ class LinkWell extends StatelessWidget {
     /// An Iterable with variable name matches
     /// Is assigned to our regular expression with
     /// allMatched method call
-    Iterable<RegExpMatch> matches = exp.allMatches(this.text);
+    Iterable<RegExpMatch> matches = (exp ?? Helper.regex).allMatches(this.text);
 
     /// We now run a forEach Loop to add our matche to
     /// the links List
@@ -229,7 +230,9 @@ class LinkWell extends StatelessWidget {
 
         var l = value.toString().contains('https://')
             ? value
-            : value.toString().contains('http://') ? value : 'http://' + value;
+            : value.toString().contains('http://')
+                ? value
+                : 'http://' + value;
         var name = l;
 
         if (this.listOfNames != null) {
